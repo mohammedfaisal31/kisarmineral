@@ -22,6 +22,9 @@ function QRCodeScanner() {
   const [showDeniedAlert, setShowDeniedAlert] = useState(false);
   const [scannedId,setScannedId] = useState(null);
   const [dynamicWindowWidth,setDynamicWindowWidth] = useState(450)
+  const constraints = {
+    facingMode: { exact: "environment" }
+  };
   
   const openScanner = ()=>{
     setOpenScan(true);
@@ -113,6 +116,7 @@ function QRCodeScanner() {
                 delay={200}
                 onError={handleError}
                 onScan={handleScan}
+                constraints	= {constraints}
             />
             }
             
