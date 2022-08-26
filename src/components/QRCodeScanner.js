@@ -110,7 +110,6 @@ function QRCodeScanner() {
             {
             openScan && 
             <QrReader
-                facingMode={'user'}
                 delay={200}
                 onError={handleError}
                 onScan={handleScan}
