@@ -1,0 +1,22 @@
+.ScannerGrid{
+    display:"flex";
+    align-items:"center";
+    justify-content:"center";
+    text-align:"center";
+    flex-direction:"column";
+    
+  }
+
+.ScannerBox{
+    border-radius:"10px";
+    width: 300;
+    height: "fit-content";
+    background-color: "#fff";
+}
+
+
+.ScannerIcon{
+    width:200;
+    height:200;
+    color:"#3abca7";
+}
