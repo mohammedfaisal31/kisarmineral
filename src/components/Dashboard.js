@@ -23,8 +23,8 @@ import "../App.css";
 
 export default function Dashboard() {
   const [display_register_modal, setDisplay_register_modal] = useState("none");
-  const [modal_section, setModal_section_display] = useState("");
-  const [modal_height, setModal_height] = useState("fit-content");
+  const [modal_section] = useState("");
+  const [modal_height] = useState("fit-content");
   const [displayAlert, setIfDisplayAlert] = useState(false);
   const [openBackDrop, setOpenBackDrop] = useState(false);
   const[showQRCode,setShowQRCode] = useState(false);
