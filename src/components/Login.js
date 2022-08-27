@@ -20,15 +20,15 @@ export default function Login(){
     const [ifDisplayAlert,setIfDisplayAlert] = useState("none");
     const paperStyle = {padding:20,height:"fit-content",width:"40vh",margin:"20vh auto"};
     const pStyle = {fontSize:"25px",fontWeight:"bold",margin:"10px 20px "};
-    const keyStyle = {backgroundColor:'#11acba'};
+    const keyStyle = {backgroundColor:'#3abca7'};
     const gridStyle = {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
                     } //CSS to make grid responsive
-    const loginButtonStyle = {backgroundColor:"#11acba",marginTop:"18px"}
-    const signupButtonStyle = {backgroundColor:"#11acba"}
+    const loginButtonStyle = {backgroundColor:"#3abca7",marginTop:"18px"}
+    const signupButtonStyle = {backgroundColor:"#3abca7"}
 
     const initialValues = {
         email:"",
