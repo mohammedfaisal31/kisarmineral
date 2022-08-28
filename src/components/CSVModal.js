@@ -10,7 +10,7 @@ export default function CSVModal({showMe}) {
     const visitorDataListRef = useRef();
     const[openBackDrop,setOpenBackDrop] = useState(false);
     const[success,setSuccess] = useState(false);
-    const [dynamicWindowWidth,setDynamicWindowWidth] = useState(460)
+    const [dynamicWindowWidth,setDynamicWindowWidth] = useState(getInitialWidth())
   
     visitorDataListRef.current = visitorDataList;
     const box1_style = {
@@ -224,4 +224,8 @@ const registerVisitor = (visitorDataObject)=>{
 
   const getDynamicWidth = (dynamicWindowWidth = window.innerWidth)=>{
     return dynamicWindowWidth > 572 ? 460 : dynamicWindowWidth < 365 ? dynamicWindowWidth * 0.6 : dynamicWindowWidth * 0.4;
+  }
+
+  const getInitialWidth = ()=>{
+    return window.innerWidth > 572 ? 460 : window.innerWidth*0.7
   }
