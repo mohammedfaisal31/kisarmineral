@@ -12,7 +12,7 @@ const SelectWrapperWithTextField = (
     
     const handleChange = e =>{
         const {value} = e.target;
-        if((value === "Yes") || (value ===  "UPI/GPay/PhonePe/Paytm")) setGenerateTextField(true);
+        if((value === "Yes") || (value ===  "UPI/GPay/PhonePe/Paytm" || value ===  "IMojo" || value ===  "Netbanking" )) setGenerateTextField(true);
         else setGenerateTextField(false);
         setFieldValue(name,value || "");
 

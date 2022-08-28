@@ -15,6 +15,7 @@ import VisitorPropsContext from "../context/VisitorPropsContext";
 import axios from "axios";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
+import CSVModal from "./CSVModal.js";
 
 import QRCodeWrap from "./QRCodeWrap";
 import {object,string} from "yup";
@@ -28,6 +29,8 @@ export default function Dashboard() {
   const [displayAlert, setIfDisplayAlert] = useState(false);
   const [openBackDrop, setOpenBackDrop] = useState(false);
   const[showQRCode,setShowQRCode] = useState(false);
+  const[openCSVModal,setOpenCSVModal] = useState(false);
+  
   
   const handleCloseRegisterForm = () => {
     setDisplay_register_modal("none");
@@ -46,6 +49,9 @@ export default function Dashboard() {
     setOpenBackDrop(false);
     setIfDisplayAlert(true);
   };
+  const showOpenCSVModal = (message)=>{
+    setOpenCSVModal(message);
+  }
 
   const handleEntrySubmit = (values) => {
     setIfDisplayAlert(false);
@@ -91,7 +97,7 @@ export default function Dashboard() {
   return (
     <>
       <Navbar />
-      <Tools getDisplayStatusFromTools={getDisplayStatus} />
+      <Tools getDisplayStatusFromTools={[getDisplayStatus,showOpenCSVModal]} />
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={openBackDrop}
@@ -234,12 +240,14 @@ export default function Dashboard() {
                               Cash: "Cash",
                               "UPI/GPay/PhonePe/Paytm":
                                 "UPI/GPay/PhonePe/Paytm",
+                                "IMojo":"IMojo",
+                                "Netbanking":"Netbanking"
                             }}
                             label="Payment method"
                             requiredTextField={[
                               "upi_number",
-                              "UPI ref number",
-                              "Enter UPI ref number",
+                              "Transaction ID",
+                              "Enter transaction ID",
                             ]}
                             style={{ width: "47%", marginTop: "15px" }}
                         
@@ -296,6 +304,7 @@ export default function Dashboard() {
         )}
       </Formik>
       {/* The end of Entry form */}
+      {openCSVModal && <CSVModal showMe={[openCSVModal,setOpenCSVModal]}/>}
     </>
   );
 }
