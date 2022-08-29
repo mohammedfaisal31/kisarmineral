@@ -89,11 +89,12 @@ export default function CSVModal({showMe}) {
                 alert("Unknown error")
                 handleClose()
                 }else setSuccess(true);
-            })
+                setOpenBackDrop(false)
+              })
             .catch((err)=>console.log(err));
     })
     }
-    setOpenBackDrop(false);
+    
  };
  
  useEffect(() => {

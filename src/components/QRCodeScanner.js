@@ -21,7 +21,7 @@ function QRCodeScanner() {
   const [showGrantedAlert, setShowGrantedAlert] = useState(false);
   const [showDeniedAlert, setShowDeniedAlert] = useState(false);
   const [scannedId,setScannedId] = useState(null);
-  const [dynamicWindowWidth,setDynamicWindowWidth] = useState(450)
+  const [dynamicWindowWidth,setDynamicWindowWidth] = useState(450);
   const constraints = {
     facingMode: { exact: "environment" }
   };
@@ -62,6 +62,7 @@ function QRCodeScanner() {
     } 
     
   }
+  
   useEffect(() => {
     const handleResize = () => setDynamicWindowWidth(getWindowWidth()) 
     window.addEventListener("resize",handleResize)

@@ -6,6 +6,7 @@ import excelAdd from "../icons/excel-add-icon.svg";
 export default function Tools({getDisplayStatusFromTools}){
     const history = useHistory();
     const routeToScan = ()=> history.push("/scan");
+    const routeToLogs = ()=> history.push("/logs");
     return(<>
             <div className="header">
             </div>
@@ -19,7 +20,7 @@ export default function Tools({getDisplayStatusFromTools}){
             <button onClick={routeToScan} className="tool-btn"><img  className="add-icon" src={scanner} alt="icon"/></button>
             <p>Scan QR code</p>
             </div>
-            <div className="trunk-item">
+            <div onClick={routeToLogs} className="trunk-item">
             <button  className="tool-btn"><img  className="add-icon" src={list} alt="icon"/></button>
             <p>Check Log</p>
             </div>
