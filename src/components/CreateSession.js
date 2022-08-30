@@ -1,5 +1,5 @@
 import React,{useState,useContext} from 'react'
-import { Button, Stack, TextField } from '@mui/material'
+import { Button, Paper, Stack, TextField,Backdrop ,CircularProgress} from '@mui/material'
 import { Formik,Field,Form } from 'formik';
 import {object,string} from "yup";
 import SessionContext from '../context/SessionContext.js';
@@ -11,6 +11,7 @@ export default function CreateSession() {
     const [showForm, setShowForm] = useState(false);
     const [showCreateButton, setShowCreateButton] = useState(true);
     const [showEndButton, setShowEndButton] = useState(false);
+    const [showBackdrop,setShowBackdrop] = useState(false);
     const sessionHandler = useContext(SessionContext);
     
     const createSession = ()=>{
@@ -28,6 +29,7 @@ export default function CreateSession() {
         session_title:"First day"
     }
     const handleSubmit =  ( async (value)=>{
+        setShowBackdrop(true);
         setShowForm(false);
         setShowCreateButton(false);
         setShowEndButton(true);
@@ -37,6 +39,7 @@ export default function CreateSession() {
             axios.post(`https://mineral-api-server.herokuapp.com/api/addSession/${session_id}`)
             .catch()
         })
+        .then(()=>setShowBackdrop(false))
         .catch();
         
     })
@@ -45,12 +48,16 @@ export default function CreateSession() {
     return (
     
     <>
+    
+     <Paper elevation={5}>
+     {showBackdrop && <CircularProgress color="primary" />}
         <h1>{sessionOn}</h1>
         <h1>{sessionHandler.sessionId}</h1>
         <h1>{sessionHandler.sessionTitle}</h1>
+        
         <Stack spacing={2}>
-        {showEndButton && <Button type="button" onClick={endSession} variant="contained">End Session</Button>}
-        {showCreateButton && <Button type="button" onClick={createSession} variant="contained">Create Session</Button>}
+        {showEndButton && <Button type="button" onClick={endSession} variant="contained" style={{width:200}}>End Session</Button>}
+        {showCreateButton && <Button type="button" onClick={createSession} variant="contained" style={{width:200}}>Create Session</Button>}
         {
         showForm &&
         <div className='sessionForm'>
@@ -88,6 +95,7 @@ export default function CreateSession() {
         </div>
         }
         </Stack>
+        </Paper>
     </>
   )
 }

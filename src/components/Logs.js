@@ -1,10 +1,12 @@
-import { Table,TableBody, TableContainer, TableHead,TableRow,TableCell, Paper, TablePagination } from '@mui/material'
+import { Table,TableBody, TableContainer, TableHead,TableRow,TableCell, 
+  Paper, Select,MenuItem, TablePagination ,TextField, Toolbar, Typography, Grid} from '@mui/material'
 import axios from 'axios';
 import React,{useContext, useEffect,useRef,useState} from 'react'
 import Navbar from './Navbar';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { useHistory } from 'react-router-dom';
 import VisitorPropsContext from '../context/VisitorPropsContext';
+import SearchIcon from '@mui/icons-material/Search';
 export default function Logs() {
   const visitorPropsHandler = useContext(VisitorPropsContext);
   const[records,setRecords] = useState([]);
@@ -13,6 +15,8 @@ export default function Logs() {
   const[page,setPage] = useState(0);
   const [recordsPerPage,setRecordsPerPage] = useState(pages[page]);
   const history = useHistory();
+  const [searchQuery,setSearchQuery] = useState("");
+  const [searchCategory,setSearchCategory] = useState("");
   useEffect(() => {
     getAllVisitors()
     .then(result=>setRecords(result.data.message))
@@ -37,13 +41,28 @@ export default function Logs() {
     console.log(event)
     setPage(newpage);
   }
+  const handleOnChangeSearchCategory= (e)=>{
+    setSearchCategory(e.target.value);
+  }
   const handleRowsChangePerPage=(event)=>{
     setRecordsPerPage(parseInt(event.target.value,10));
     setPage(0);
   }
 
-  const recordsAfterPaging = ()=>{
-    return records.slice(page*recordsPerPage,(page+1)*recordsPerPage);
+  const handleOnChangeSearchQuery=(e)=>{
+    setSearchQuery(e.target.value);
+  }
+
+  const recordsAfterPagingAndFilter=  ()=>{
+    return records.filter((individualVisitorObject)=>{
+      if(searchQuery === ""){
+        return individualVisitorObject
+      }
+      else if (individualVisitorObject[searchCategory.toLowerCase()].includes(searchQuery)){
+        return individualVisitorObject
+      }
+    })
+      .slice(page*recordsPerPage,(page+1)*recordsPerPage);
   }
   const handQrClick = (e,item)=>{
     e.preventDefault();
@@ -57,8 +76,35 @@ export default function Logs() {
     <h1>{visitorPropsHandler.visitor_id}</h1>
     <Navbar/>
     <Paper elevation={5} sx={{margin:"5% 5%",marginLeft:"25vh",marginRight:"25vh",width:"fit-content"}}>
+    <Paper elevation={5} style={{textAlign:"center"}}>
+    <Typography variant="h5" style={{backgroundColor:"#3abca7",color:"#fff",padding:10}}>ENTRY LOG</Typography>
+    </Paper>
     
-    <Table >
+    <Toolbar style={{display:"flex",padding:10}}>
+      
+    <TextField id="search-field" label={<SearchIcon/>}
+              placeholder={`Search by ${searchCategory} `}
+              variant="filled" 
+              onChange={handleOnChangeSearchQuery}
+              />
+    <TextField
+      labelId="search-bar"
+      select={true}
+      id="search-bar"
+      value={searchCategory}
+      label="Search by"
+      onChange={handleOnChangeSearchCategory}
+      style={{marginLeft:"10px"}}
+      >
+      <MenuItem value="name">Name</MenuItem>
+      <MenuItem value="email">Email</MenuItem>
+      <MenuItem value="phone_number">Phone number</MenuItem>
+      <MenuItem value="registration_number">KMC number</MenuItem>
+      <MenuItem value="visitor_id">Visitor ID</MenuItem>
+      
+    </TextField>
+    </Toolbar>
+    <Table>
        
     <TableContainer >
         <TableHead>
@@ -68,7 +114,7 @@ export default function Logs() {
         </TableHead>
         
         <TableBody>
-        {recordsAfterPaging().map(item=>{
+        {recordsAfterPagingAndFilter().map(item=>{
             return (<TableRow key={item.email}>
                 <TableCell>{item.visitor_id}</TableCell>
                 <TableCell>{item.name}</TableCell>
