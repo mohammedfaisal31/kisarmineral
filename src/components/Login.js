@@ -42,7 +42,7 @@ export default function Login(){
         history.push("/dashboard");
     }
     const handleLoginSubmit = (values) =>{
-        axios.post("https://mineral-api-server.herokuapp.com/api/login",values)
+        axios.post("http://34.93.32.5:4000/api/login",values)
         .then((result)=>result.data === "LOGIN_SUCCESS" ? handleLoginSuccess() : result.data === "LOGIN_UNSUCCESS" ? setIfDisplayAlert("flex"): console.log("UNKNOWN_ERROR1"))
         .catch();
     }

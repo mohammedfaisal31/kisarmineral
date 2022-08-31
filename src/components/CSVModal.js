@@ -219,7 +219,7 @@ export default function CSVModal({showMe}) {
 }
 
 const registerVisitor = (visitorDataObject)=>{
-    return axios.post("https://mineral-api-server.herokuapp.com/api/registerVisitor", visitorDataObject)
+    return axios.post("http://34.93.32.5:4000/api/registerVisitor", visitorDataObject)
 }
 
 

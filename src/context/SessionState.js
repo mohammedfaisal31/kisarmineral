@@ -6,12 +6,12 @@ import SessionContext from "./SessionContext.js";
 const SessionState = ({children}) =>{
     useEffect(() => {
     
-        axios.get("https://mineral-api-server.herokuapp.com/api/sessionStatus")
+        axios.get("http://34.93.32.5:4000/api/sessionStatus")
         .then((result)=>{
           if(result)  {
             const id = result.data.message[0].session_id;
             setSessionId(id);
-            axios.get(`https://mineral-api-server.herokuapp.com/api/getSessionTitle/${id}`)
+            axios.get(`http://34.93.32.5:4000/api/getSessionTitle/${id}`)
             .then((result)=> setSessionTitle(result.data.message[0].session_title))
             .catch();
             } 

@@ -6,7 +6,7 @@ import SessionContext from '../context/SessionContext'
 export default function EndSession() {
   const sessionHandler = useContext(SessionContext);
 const endSession = () =>{
-    axios.post(`https://mineral-api-server.herokuapp.com/api/deleteSession/${sessionHandler.sessionId}`)
+    axios.post(`http://34.93.32.5:4000/api/deleteSession/${sessionHandler.sessionId}`)
     .then()
     .catch()
   }

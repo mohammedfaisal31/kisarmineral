@@ -147,5 +147,5 @@ export default function Logs() {
 
 
 const getAllVisitors = ()=>{
-    return axios.get("https://mineral-api-server.herokuapp.com/api/getAllVisitors")
+    return axios.get("http://34.93.32.5:4000/api/getAllVisitors")
 }

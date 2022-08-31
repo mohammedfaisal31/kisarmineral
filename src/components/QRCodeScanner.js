@@ -37,7 +37,7 @@ function QRCodeScanner() {
       setScannedId(visitor_id)
       setOpenScan(false); 
       const session_obj = {visitor_id:visitor_id,session_id:sessionHandler.sessionId};
-      axios.get(`https://mineral-api-server.herokuapp.com/api/getPermission/${session_obj.visitor_id}/${session_obj.session_id}`)
+      axios.get(`http://34.93.32.5:4000/api/getPermission/${session_obj.visitor_id}/${session_obj.session_id}`)
       .then((result)=>{
         if(result.data.message.length === 0){
           playError(); 
@@ -169,7 +169,7 @@ function QRCodeScanner() {
 export default QRCodeScanner;
 
 const revokePermission = ((session_obj)=>{
-    return axios.post(`https://mineral-api-server.herokuapp.com/api/revokePermission/${session_obj.visitor_id}/${session_obj.session_id}`)
+    return axios.post(`http://34.93.32.5:4000/api/revokePermission/${session_obj.visitor_id}/${session_obj.session_id}`)
 
   })
 const getWindowWidth = ()=>{

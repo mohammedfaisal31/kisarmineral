@@ -36,7 +36,7 @@ export default function Register(){
     const handleRegisterSubmit = (values) =>{
         delete values.confirm_password;
 
-        axios.post("https://mineral-api-server.herokuapp.com/api/register",values)
+        axios.post("http://34.93.32.5:4000/api/register",values)
         .then((result)=>result.data === "ROW_INSERTED" ? history.push("/login") : (result.data === "DUP_ENTRY" ? setIfDisplayAlert("flex") : alert("Unknown error")))
         .catch();
     }

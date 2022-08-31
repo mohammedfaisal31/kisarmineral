@@ -15,6 +15,9 @@ export default function QRFinal() {
     })
     return (
     <div className='RotatedDivContainer'>
+      <Typography style={{fontSize:"90px",fontWeight:"bolder"}} className="NamePrint" variant="h4" display="block" gutterBottom>
+        {visitorPropsHandler.visitorProps.name}
+        </Typography>
     <div className="RotatedDiv">
     <QRCode
       value={visitorPropsHandler.visitorProps.visitor_id}
@@ -26,9 +29,7 @@ export default function QRFinal() {
       </Typography>
     
   </div>
-        <Typography style={{fontSize:"90px",fontWeight:"bolder"}} className="NamePrint" variant="h4" display="block" gutterBottom>
-        {visitorPropsHandler.visitorProps.name}
-        </Typography>
+        
     </div>
   )
 }
