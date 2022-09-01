@@ -219,7 +219,7 @@ export default function CSVModal({showMe}) {
 }
 
 const registerVisitor = (visitorDataObject)=>{
-    return axios.post("http://34.93.32.5:4000/api/registerVisitor", visitorDataObject)
+    return axios.post("https://kisargo-api.tk/api/registerVisitor", visitorDataObject)
 }
 
 

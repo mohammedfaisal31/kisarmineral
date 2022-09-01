@@ -68,7 +68,7 @@ export default function Dashboard() {
       ).toString()}`;
     values.visitor_id = temp_visitor_id;
     axios
-      .post("http://34.93.32.5:4000/api/registerVisitor", values)
+      .post("https://kisargo-api.tk/api/registerVisitor", values)
       .then((result) =>{
         result.data === "ROW_INSERTED"
           ? handleEntrySuccess(values)

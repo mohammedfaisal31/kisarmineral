@@ -36,7 +36,7 @@ export default function CreateSession() {
         const session_id = await generateID();
         await consoleRegisterAllVisitors({session_title:value.session_title,session_id:session_id})
         .then(()=>{
-            axios.post(`http://34.93.32.5:4000/api/addSession/${session_id}`)
+            axios.post(`https://kisargo-api.tk/api/addSession/${session_id}`)
             .catch()
         })
         .then(()=>setShowBackdrop(false))
@@ -112,7 +112,7 @@ const consoleRegisterAllVisitors = async (session_params) => {
     
                  result.data.message.map(visitor_object=>{
                  return new Promise((resolve,reject)=>{
-                     axios.post(`http://34.93.32.5:4000/api/addConsoleEntry/${visitor_object.visitor_id}`,session_params)
+                     axios.post(`https://kisargo-api.tk/api/addConsoleEntry/${visitor_object.visitor_id}`,session_params)
                      .then((result)=>resolve(result.data))
                      .catch((err)=>reject(err));
                  })
@@ -124,7 +124,7 @@ const consoleRegisterAllVisitors = async (session_params) => {
 
 const getAllVisitorsIds = ()=>{
     return new Promise((resolve,reject)=>{
-        axios.get("http://34.93.32.5:4000/api/getAllVisitorIds")
+        axios.get("https://kisargo-api.tk/api/getAllVisitorIds")
         .then((result)=> resolve(result))
         .catch((err)=>reject(err));
     })
