@@ -16,7 +16,7 @@ export default function Logs() {
   const [recordsPerPage,setRecordsPerPage] = useState(pages[page]);
   const history = useHistory();
   const [searchQuery,setSearchQuery] = useState("");
-  const [searchCategory,setSearchCategory] = useState("");
+  const [searchCategory,setSearchCategory] = useState("name");
   useEffect(() => {
     getAllVisitors()
     .then(result=>setRecords(result.data.message))

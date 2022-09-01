@@ -1,5 +1,5 @@
 import React,{useState,useContext} from 'react'
-import { Button, Paper, Stack, TextField,Backdrop ,CircularProgress} from '@mui/material'
+import { Button, Paper, Stack, TextField,Backdrop ,CircularProgress, Typography} from '@mui/material'
 import { Formik,Field,Form } from 'formik';
 import {object,string} from "yup";
 import SessionContext from '../context/SessionContext.js';
@@ -35,11 +35,13 @@ export default function CreateSession() {
         setShowEndButton(true);
         const session_id = await generateID();
         await consoleRegisterAllVisitors({session_title:value.session_title,session_id:session_id})
+        .then((result)=>{
+            if(result) setShowBackdrop(false);
+        })
         .then(()=>{
-            axios.post(`https://kisargo-api.tk/api/addSession/${session_id}`)
+             axios.post(`https://kisargo-api.tk/api/addSession/${session_id}`)
             .catch()
         })
-        .then(()=>setShowBackdrop(false))
         .catch();
         
     })
@@ -50,7 +52,18 @@ export default function CreateSession() {
     <>
     
      <Paper elevation={5}>
-     {showBackdrop && <CircularProgress color="primary" />}
+     {showBackdrop && 
+     <Backdrop
+     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+     open={showBackdrop}
+    >
+    <Stack spacing={2} sx={{textAlign:"center"}}>
+     <CircularProgress color="inherit" />
+     <Typography >Creating Session</Typography>
+     </Stack>
+    </Backdrop>
+     
+     }
         <h1>{sessionOn}</h1>
         <h1>{sessionHandler.sessionId}</h1>
         <h1>{sessionHandler.sessionTitle}</h1>
@@ -107,7 +120,7 @@ const generateID = async () =>{
 }
 
 const consoleRegisterAllVisitors = async (session_params) => {
-   getAllVisitorsIds()
+   return getAllVisitorsIds()
          .then((result)=>
     
                  result.data.message.map(visitor_object=>{

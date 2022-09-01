@@ -176,8 +176,8 @@ export default function Dashboard() {
                           as={TextField}
                           id="reg-no"
                           name="registration_number"
-                          label="State Reg number"
-                          placeholder="Enter state registration number"
+                          label="KMC number"
+                          placeholder="Enter KMC  number"
                           variant="filled"
                           style={{ marginTop: "10px" }}
                           error={Boolean(errors.registration_number) && Boolean(touched.registration_number)}
