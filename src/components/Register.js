@@ -46,7 +46,7 @@ export default function Register(){
         <Paper elevation={5} style={paperStyle}>
             <Grid align="center" style={gridStyle}>
                 <Avatar style={keyStyle}><HowToRegIcon /></Avatar>
-                <p style={pStyle}>Mineral Register</p>
+                <p style={pStyle}>KisarGo Register</p>
             </Grid>
             <Alert style={{display:ifDisplayAlert}} severity="error">User already exists</Alert>
             <Formik initialValues={initialValues} 
