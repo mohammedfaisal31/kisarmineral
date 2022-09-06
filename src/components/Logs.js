@@ -1,5 +1,5 @@
 import { Table,TableBody, TableContainer, TableHead,TableRow,TableCell, 
-  Paper, Select,MenuItem, TablePagination ,TextField, Toolbar, Typography, Grid} from '@mui/material'
+  Paper,MenuItem, TablePagination ,TextField, Toolbar, Typography} from '@mui/material'
 import axios from 'axios';
 import React,{useContext, useEffect,useRef,useState} from 'react'
 import Navbar from './Navbar';
@@ -7,6 +7,10 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { useHistory } from 'react-router-dom';
 import VisitorPropsContext from '../context/VisitorPropsContext';
 import SearchIcon from '@mui/icons-material/Search';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditModal from './EditModal.js';
+import DeleteModal from './DeleteModal.js';
 export default function Logs() {
   const visitorPropsHandler = useContext(VisitorPropsContext);
   const[records,setRecords] = useState([]);
@@ -17,6 +21,12 @@ export default function Logs() {
   const history = useHistory();
   const [searchQuery,setSearchQuery] = useState("");
   const [searchCategory,setSearchCategory] = useState("name");
+  const [editableRecord,setEditableRecord] = useState({open:false});
+  const [deletableRecord,setDeletableRecord] = useState({open:false});
+  
+
+
+
   useEffect(() => {
     getAllVisitors()
     .then(result=>setRecords(result.data.message))
@@ -34,8 +44,8 @@ export default function Logs() {
                     {id:"sponsor_name",header:"Sponsor name"},
                     {id:"amount_paid",header:"Amount paid "},
                     {id:"upi_number",header:"Transaction ID"},
-                    {id:"print_qr_code",header:"Print QR Code"}
-                    
+                    {id:"print_qr_code",header:"Print QR Code"},
+                    {id:"edit",header:"Edit/Delete entry"},
                     ];
   const handlePageChange=(event,newpage)=>{
     console.log(event)
@@ -52,6 +62,14 @@ export default function Logs() {
   const handleOnChangeSearchQuery=(e)=>{
     setSearchQuery(e.target.value);
   }
+  const handleEditModal=(e,item)=>{
+    e.preventDefault()
+    setEditableRecord({open:true,details:item});
+  }
+  const handleDeleteModal=(e,item)=>{
+    setDeletableRecord({open:true,details:item});
+  }
+  
 
   const recordsAfterPagingAndFilter=  ()=>{
     return records.filter((individualVisitorObject)=>{
@@ -115,7 +133,9 @@ export default function Logs() {
         
         <TableBody>
         {recordsAfterPagingAndFilter().map(item=>{
-            return (<TableRow key={item.email}>
+            return (
+              <>
+            <TableRow key={item.email}>
                 <TableCell>{item.visitor_id}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.email}</TableCell>
@@ -124,9 +144,14 @@ export default function Logs() {
                 <TableCell>{item.sponsor_name === "" ? "-" : item.sponsor_name}</TableCell>
                 <TableCell>{item.amount_paid}</TableCell>
                 <TableCell>{item.upi_number === "" ? "-" : item.upi_number}</TableCell>
-                <TableCell><QrCode2Icon onClick={(e)=>handQrClick(e,item)}></QrCode2Icon></TableCell>
-                
-            </TableRow>)
+                <TableCell><QrCode2Icon onClick={(e)=>handQrClick(e,item)} ></QrCode2Icon></TableCell>
+                <TableCell>
+                  <EditIcon  onClick={(e)=>handleEditModal(e,item)} sx={{backgroundColor:"#3abca7",color:"#fff"}}></EditIcon>
+                  <DeleteIcon onClick={(e)=>handleDeleteModal(e,item)} sx={{backgroundColor:"#db5a5a",color:"#fff",marginLeft:"5px"}}></DeleteIcon>
+                </TableCell>
+            </TableRow>
+            </>
+            )
         })}
         </TableBody>
         
@@ -141,6 +166,9 @@ export default function Logs() {
             onRowsPerPageChange={handleRowsChangePerPage}
         />
     </Paper>
+    {editableRecord.open && <EditModal props={[editableRecord,setEditableRecord]}></EditModal>}
+    { deletableRecord.open && <DeleteModal props={[deletableRecord,setDeletableRecord]}></DeleteModal> }
+            
     </>
   )
 }
