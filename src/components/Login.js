@@ -53,7 +53,7 @@ export default function Login(){
         <Paper elevation={5} style={paperStyle}>
             <Grid align="center" style={gridStyle} >
                 <Avatar style={keyStyle}><KeyOutlinedIcon /></Avatar>
-                <p style={pStyle}>Mineral Login</p>
+                <p style={pStyle}>KisarGo Login</p>
             </Grid>
             <Alert style={{display:ifDisplayAlert}} severity="error">Email or password is wrong, Please re Enter</Alert>
             <Formik initialValues={initialValues} 
