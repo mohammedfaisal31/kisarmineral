@@ -1,55 +1,58 @@
-import { Table,TableBody, TableContainer, TableHead,TableRow,TableCell, 
-  Paper,MenuItem, TablePagination ,TextField, Toolbar, Typography} from '@mui/material'
 import axios from 'axios';
-import React,{useContext, useEffect,useRef,useState} from 'react'
-import Navbar from './Navbar';
-import QrCode2Icon from '@mui/icons-material/QrCode2';
-import { useHistory } from 'react-router-dom';
-import VisitorPropsContext from '../context/VisitorPropsContext';
+import React from 'react';
+import { useEffect,useState ,useRef} from 'react';
+import Navbar from './Navbar.js';
+import { 
+        Paper, 
+        Typography,
+        Toolbar,
+        TextField, 
+        MenuItem,
+        Table,
+        TableContainer,
+        TableHead,
+        TableRow,
+        TableBody,
+        TableCell,
+        TablePagination
+    } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditModal from './EditModal.js';
-import DeleteModal from './DeleteModal.js';
-export default function Logs() {
-  const visitorPropsHandler = useContext(VisitorPropsContext);
-  const history = useHistory();
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+export default function AttendanceTable(props) {
+  const[selectedSessionID,setSelectedSessionID] = useState("");
+  const[selectedSessionTitle,setSelectedSessionTitle] = useState("");
   
   const[records,setRecords] = useState([]);
   const recordRef = useRef();
-  const pages = [10,30,50]
+  const pages = [10,30,50,Math.floor(records.length/2)]
   const[page,setPage] = useState(0);
   const [recordsPerPage,setRecordsPerPage] = useState(pages[page]);
   const [searchQuery,setSearchQuery] = useState("");
   const [searchCategory,setSearchCategory] = useState("name");
-  const [editableRecord,setEditableRecord] = useState({open:false});
-  const [deletableRecord,setDeletableRecord] = useState({open:false});
-  
-
-
-
+  const headings = [
+    {id:"visitor_id",header:"Visitor ID"},
+    {id:"name",header:"Name"},
+    {id:"email",header:"Email"},
+    {id:"registration_number",header:"KMC number"},
+    {id:"phone_number",header:"Phone number"},
+    {id:"attendance",header:"Attendance"}
+    
+  ]
   useEffect(() => {
+    setSelectedSessionID(props.props.selectedSessionID);
+    getSessionTitleBySessionId(props.props.selectedSessionID)
+    .then((result)=>setSelectedSessionTitle(result.data.message[0].session_title))
+    .catch();
     getAllVisitors()
     .then(result=>setRecords(result.data.message))
     .catch((err)=>console.log(err));
-  }, [])
   
-  recordRef.current = records; 
+}, [])
+recordRef.current = records; 
 
-  const headings = [
-                    {id:"visitor_id",header:"Visitor ID"},
-                    {id:"name",header:"Name"},
-                    {id:"email",header:"Email"},
-                    {id:"registration_number",header:"KMC number"},
-                    {id:"phone_number",header:"Phone number"},
-                    {id:"sponsor_name",header:"Sponsor name"},
-                    {id:"amount_paid",header:"Amount paid "},
-                    {id:"upi_number",header:"Transaction ID"},
-                    {id:"print_qr_code",header:"Print QR Code"},
-                    {id:"edit",header:"Edit/Delete entry"},
-                    ];
-  const handlePageChange=(event,newpage)=>{
-    console.log(event)
+
+const handlePageChange=(event,newpage)=>{
     setPage(newpage);
   }
   const handleOnChangeSearchCategory= (e)=>{
@@ -63,15 +66,17 @@ export default function Logs() {
   const handleOnChangeSearchQuery=(e)=>{
     setSearchQuery(e.target.value);
   }
-  const handleEditModal=(e,item)=>{
-    e.preventDefault()
-    setEditableRecord({open:true,details:item});
+  const getAllVisitors = ()=>{
+    return axios.get("https://kisargo-api.tk/api/getAllVisitors")
   }
-  const handleDeleteModal=(e,item)=>{
-    setDeletableRecord({open:true,details:item});
+  const getAttendanceStatus = (visitor_id,session_id)=>{
+    return axios.get(`https://kisargo-api.tk/api/getAttendanceStatus/${visitor_id}/${session_id}`);
+  }
+  const getSessionTitleBySessionId = (session_id)=>{
+    return axios.get(`https://kisargo-api.tk/api/getSessionTitleBySessionId/${session_id}`);
   }
   
-
+  
   const recordsAfterPagingAndFilter=  ()=>{
     return records.filter((individualVisitorObject)=>{
       if(searchQuery === ""){
@@ -83,11 +88,6 @@ export default function Logs() {
     })
       .slice(page*recordsPerPage,(page+1)*recordsPerPage);
   }
-  const handQrClick = (e,item)=>{
-    e.preventDefault();
-    visitorPropsHandler.updateVisitorProps(item);
-    history.push("/qrFinal");
-  }
   
   
   return (
@@ -95,7 +95,7 @@ export default function Logs() {
     <Navbar/>
     <Paper elevation={5} sx={{margin:"5% 5%",marginLeft:"25vh",marginRight:"25vh",width:"fit-content"}}>
     <Paper elevation={5} style={{textAlign:"center"}}>
-    <Typography variant="h5" style={{backgroundColor:"#3abca7",color:"#fff",padding:10}}>ENTRY LOG</Typography>
+    <Typography variant="h5" style={{backgroundColor:"#3abca7",color:"#fff",padding:10}}>Attendance for {selectedSessionTitle}</Typography>
     </Paper>
     
     <Toolbar style={{display:"flex",padding:10}}>
@@ -132,7 +132,7 @@ export default function Logs() {
         </TableHead>
         
         <TableBody>
-        {recordsAfterPagingAndFilter().map(item=>{
+        {recordsAfterPagingAndFilter().map((item)=>{
             return (
               <>
             <TableRow key={item.email}>
@@ -141,14 +141,17 @@ export default function Logs() {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.registration_number}</TableCell>
                 <TableCell>{item.phone_number}</TableCell>
-                <TableCell>{item.sponsor_name === "" ? "-" : item.sponsor_name}</TableCell>
-                <TableCell>{item.amount_paid}</TableCell>
-                <TableCell>{item.upi_number === "" ? "-" : item.upi_number}</TableCell>
-                <TableCell><QrCode2Icon onClick={(e)=>handQrClick(e,item)} ></QrCode2Icon></TableCell>
-                <TableCell>
-                  <EditIcon  onClick={(e)=>handleEditModal(e,item)} sx={{backgroundColor:"#3abca7",color:"#fff"}}></EditIcon>
-                  <DeleteIcon onClick={(e)=>handleDeleteModal(e,item)} sx={{backgroundColor:"#db5a5a",color:"#fff",marginLeft:"5px"}}></DeleteIcon>
-                </TableCell>
+                {
+                  getAttendanceStatus(item.visitor_id,selectedSessionID)
+                  .then((result)=> item.att = (result.data.message[0].notPresent))
+                  .catch()
+                  && item["att"]  
+                  ?
+                  <TableCell><ClearIcon style={{backgroundColor:"#db5a5a",color:"#fff"}}/></TableCell>
+                  :
+                  <TableCell><CheckIcon style={{backgroundColor:"#3abca7",color:"#fff"}}/></TableCell>
+                  
+                }
             </TableRow>
             </>
             )
@@ -166,14 +169,7 @@ export default function Logs() {
             onRowsPerPageChange={handleRowsChangePerPage}
         />
     </Paper>
-    {editableRecord.open && <EditModal props={[editableRecord,setEditableRecord]}></EditModal>}
-    { deletableRecord.open && <DeleteModal props={[deletableRecord,setDeletableRecord]}></DeleteModal> }
-            
+    
     </>
   )
-}
-
-
-const getAllVisitors = ()=>{
-    return axios.get("https://kisargo-api.tk/api/getAllVisitors")
 }

@@ -7,6 +7,7 @@ import QRFinal from "./components/QRFinal.js";
 import QRCodeScannerPlugin from "./components/QRCodeScanner.js";
 import CreateSession from "./components/CreateSession.js";
 import EndSession from "./components/EndSession.js";
+import Attendance from "./components/Attendance.js";
 import Logs from "./components/Logs.js";
 
 export default function Routes(){
@@ -19,6 +20,7 @@ export default function Routes(){
                 <Route exact path="/qrfinal" ><RouteProtector> <QRFinal /> </RouteProtector></Route>
                 <Route exact path="/scan" ><RouteProtector> <QRCodeScannerPlugin /> </RouteProtector></Route>
                 <Route exact path="/logs" ><RouteProtector> <Logs /> </RouteProtector></Route>
+                <Route exact path="/attendance" ><RouteProtector> <Attendance /> </RouteProtector></Route>
                 <Route exact path="/createSession" ><CreateSession/></Route>
                 <Route exact path="/endSession" ><EndSession/></Route>
                 <Route exact path="/pageNotFound" ><h1>404!</h1></Route>

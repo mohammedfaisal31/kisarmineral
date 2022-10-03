@@ -97,6 +97,7 @@ function QRCodeScanner() {
           >
             <Paper elevation={5}
             >
+              
           <Box
             sx={{
             borderRadius:"10px",
