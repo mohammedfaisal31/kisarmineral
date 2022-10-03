@@ -14,15 +14,17 @@ import {
         TableRow,
         TableBody,
         TableCell,
-        TablePagination
+        TablePagination,
+        Button
     } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import ReplayIcon from '@mui/icons-material/Replay';
 export default function AttendanceTable(props) {
   const[selectedSessionID,setSelectedSessionID] = useState("");
   const[selectedSessionTitle,setSelectedSessionTitle] = useState("");
-  
+  const[refresh,setRefresh] = useState(false);
   const[records,setRecords] = useState([]);
   const recordRef = useRef();
   const pages = [10,30,50,Math.floor(records.length/2)]
@@ -75,7 +77,10 @@ const handlePageChange=(event,newpage)=>{
   const getSessionTitleBySessionId = (session_id)=>{
     return axios.get(`https://kisargo-api.tk/api/getSessionTitleBySessionId/${session_id}`);
   }
-  
+  const handleRefresh = (e)=>{
+    if(refresh) setRefresh(false)
+    else setRefresh(true);
+  }
   
   const recordsAfterPagingAndFilter=  ()=>{
     return records.filter((individualVisitorObject)=>{
@@ -92,13 +97,15 @@ const handlePageChange=(event,newpage)=>{
   
   return (
     <>
+    {refresh}
     <Navbar/>
     <Paper elevation={5} sx={{margin:"5% 5%",marginLeft:"25vh",marginRight:"25vh",width:"fit-content"}}>
     <Paper elevation={5} style={{textAlign:"center"}}>
     <Typography variant="h5" style={{backgroundColor:"#3abca7",color:"#fff",padding:10}}>Attendance for {selectedSessionTitle}</Typography>
     </Paper>
     
-    <Toolbar style={{display:"flex",padding:10}}>
+    <Toolbar style={{display:"flex",justifyContent:"space-evenly", padding:10}}>
+    <Button variant="outlined" style={{color:"#3abca7",borderColor:"#3abca7"}} onClick={e=>handleRefresh(e)}>Refresh</Button>
       
     <TextField id="search-field" label={<SearchIcon/>}
               placeholder={`Search by ${searchCategory} `}
