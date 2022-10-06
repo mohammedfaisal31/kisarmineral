@@ -27,7 +27,7 @@ export default function AttendanceTable(props) {
   const[refresh,setRefresh] = useState(false);
   const[records,setRecords] = useState([]);
   const recordRef = useRef();
-  const pages = [records.length,10,30,50,Math.floor(records.length/2)];
+  const pages = [1000,10,30,50];
   const[page,setPage] = useState(0);
   const [recordsPerPage,setRecordsPerPage] = useState(pages[page]);
   const [searchQuery,setSearchQuery] = useState("");
